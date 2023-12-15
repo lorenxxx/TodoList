@@ -15,11 +15,6 @@ struct ListView: View {
         List {
             ForEach(listViewModel.items) { item in
                 ListRowView(item: item)
-                    .onTapGesture {
-                        withAnimation(.spring) {
-                            listViewModel.toggleIsCompleted(item: item)
-                        }
-                    }
             }
             .onMove(perform: listViewModel.moveItem)
             .onDelete(perform: listViewModel.deleteItem)

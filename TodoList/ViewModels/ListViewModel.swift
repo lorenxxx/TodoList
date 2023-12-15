@@ -45,6 +45,8 @@ class ListViewModel: ObservableObject {
         
         if let safeIndex = index {
             items[safeIndex] = item.toggleIsCompleted()
+        } else {
+            print("\(item.id) not found")
         }
     }
     
