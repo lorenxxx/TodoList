@@ -9,20 +9,33 @@ import Foundation
 
 class ListViewModel: ObservableObject {
     
-    @Published var items: [ItemModel] = []
+    @Published var items: [ItemModel] = [] {
+        didSet {
+            persistItems()
+        }
+    }
+    
+    let itemsKey: String = "iterms_list"
     
     init() {
         initItems()
     }
     
     func initItems() {
-        let newItems = [
-            ItemModel(title: "First item", isCompleted: true),
-            ItemModel(title: "Second item", isCompleted: false),
-            ItemModel(title: "Third item", isCompleted: false)
-        ]
+//        let newItems = [
+//            ItemModel(title: "First item", isCompleted: true),
+//            ItemModel(title: "Second item", isCompleted: false),
+//            ItemModel(title: "Third item", isCompleted: false)
+//        ]
         
-        self.items.append(contentsOf: newItems)
+        guard 
+            let data = UserDefaults.standard.data(forKey: itemsKey),
+            let persistedItems = try? JSONDecoder().decode([ItemModel].self, from: data)
+        else {
+            return
+        }
+        
+        self.items = persistedItems
     }
     
     func addItem(title: String) {
@@ -47,6 +60,12 @@ class ListViewModel: ObservableObject {
             items[safeIndex] = item.toggleIsCompleted()
         } else {
             print("\(item.id) not found")
+        }
+    }
+    
+    func persistItems() {
+        if let encodedData = try? JSONEncoder().encode(items) {
+            UserDefaults.standard.setValue(encodedData, forKey: itemsKey)
         }
     }
     
