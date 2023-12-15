@@ -21,12 +21,14 @@ struct AddView: View {
     
     var body: some View {
         ScrollView {
-            VStack {
+            VStack(spacing: 5) {
                 TextField("Type something here...", text: $textFieldText)
                     .padding(.horizontal)
                     .frame(height: 55)
                     .background(Color(uiColor: UIColor.secondarySystemBackground))
                     .cornerRadius(10.0)
+                
+                Spacer()
                 
                 Button(action: saveButtonPressed, label: {
                     Text("Save".uppercased())
